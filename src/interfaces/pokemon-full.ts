@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-export interface Pokemon {
+export interface PokemonResponse {
   abilities: Ability[];
   base_experience: number;
   forms: Species[];
@@ -174,11 +174,11 @@ export interface Type {
 // Converts JSON strings to/from your types
 // and asserts the results of JSON.parse at runtime
 export class Convert {
-  public static toPokemon(json: string): Pokemon {
+  public static toPokemon(json: string): PokemonResponse {
     return cast(JSON.parse(json), r('Pokemon'));
   }
 
-  public static pokemonToJson(value: Pokemon): string {
+  public static pokemonToJson(value: PokemonResponse): string {
     return JSON.stringify(uncast(value, r('Pokemon')), null, 2);
   }
 }

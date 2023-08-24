@@ -2,7 +2,7 @@ import { Layout } from '@/components/layouts';
 import { GetStaticProps } from 'next';
 import pokeApi from '@/api/pokeApi';
 import { FC } from 'react';
-import { PokemonListResponse, SmallPokemon } from '@/interfaces';
+import { SmallPokemon } from '@/interfaces';
 import { Grid } from '@nextui-org/react';
 import { PokemonCard } from '@/components/pokemon';
 
@@ -22,10 +22,10 @@ const Page: FC<PageProps> = ({ pokemons }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  const { data } = await pokeApi.get<PokemonListResponse>('/pokemon?limit=151');
+export const getStaticProps: GetStaticProps = async () => {
+  const { results } = await pokeApi.getPokemonList();
 
-  const pokemons: SmallPokemon[] = data.results.map((pokemon, index) => ({
+  const pokemons: SmallPokemon[] = results.map((pokemon, index) => ({
     ...pokemon,
     id: index + 1,
     img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${index + 1}.svg`,
