@@ -1,6 +1,5 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import pokeApi from '@/api/pokeApi';
-import { Pokemon } from '@/interfaces';
 import { PokemonPage } from '@/components/ui';
 
 const PokemonPageByName = PokemonPage;
@@ -13,13 +12,22 @@ export const getStaticPaths: GetStaticPaths = async () => {
     paths: pokemonNames.map((name) => ({
       params: { name },
     })),
-    fallback: false,
+    fallback: 'blocking',
   };
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const { name } = context.params as { [key: string]: string };
-  const pokemon: Pokemon = await pokeApi.getPokemonByName(name);
+  const pokemon = await pokeApi.getPokemonByName(name);
+
+  if (!pokemon) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
 
   return {
     props: {
